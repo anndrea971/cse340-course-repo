@@ -11,19 +11,31 @@ const PORT = process.env.PORT || 3000;
 
 const app = express();
 
-// 2. AQUÍ VA EL MIDDLEWARE (Antes de las rutas)
 /**
  * Configure Express middleware
  */
 // Serve static files from the public directory
 app.use(express.static(path.join(__dirname, 'public')));
 
-// 3. RUTAS
+/**
+ * Routes
+ */
+// Ruta para el Home (página de inicio)
 app.get('/', (req, res) => {
-    res.send('Hello from Express!');
+    res.sendFile(path.join(__dirname, 'src/views/home.html'));
 });
 
-// 4. INICIO DEL SERVIDOR
+// Ruta para Organizations
+app.get('/organizations', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src/views/organizations.html'));
+});
+
+// Ruta para Projects
+app.get('/projects', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src/views/projects.html'));
+});
+
+// 4. Inicio del servidor
 app.listen(PORT, () => {
     console.log(`Server is running at http://127.0.0.1:${PORT}`);
     console.log(`Environment: ${NODE_ENV}`);

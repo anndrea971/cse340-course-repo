@@ -2,9 +2,6 @@
   "name": "cse340-course-repo",
   "version": "1.0.0",
   "description": "",
-  "keywords": [
-    "2205"
-  ],
   "homepage": "https://github.com/anndrea971/cse340-course-repo#readme",
   "bugs": {
     "url": "https://github.com/anndrea971/cse340-course-repo/issues"
@@ -18,7 +15,7 @@
   "type": "module",
   "main": "server.js",
  "scripts": {
-  "dev": "nodemon",
+  "dev": "nodemon server.js",
   "start": "node server.js"
 },
   "dependencies": {

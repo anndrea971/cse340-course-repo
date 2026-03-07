@@ -1,0 +1,24 @@
+{
+  "name": "cse340-course-repo",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [
+    "2205"
+  ],
+  "homepage": "https://github.com/anndrea971/cse340-course-repo#readme",
+  "bugs": {
+    "url": "https://github.com/anndrea971/cse340-course-repo/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anndrea971/cse340-course-repo.git"
+  },
+  "license": "ISC",
+  "author": "andrea",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  }
+}

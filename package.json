@@ -14,11 +14,12 @@
   "author": "andrea",
   "type": "module",
   "main": "server.js",
- "scripts": {
-  "dev": "nodemon server.js",
-  "start": "node server.js"
-},
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js"
+  },
   "dependencies": {
+    "ejs": "^5.0.1",
     "express": "^5.2.1"
   },
   "devDependencies": {

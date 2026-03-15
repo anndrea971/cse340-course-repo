@@ -1,4 +1,4 @@
-import pool from '../database/index.js';
+import pool from './db.js';
 
 /* ***************************
  * Get all projects joined with organization names

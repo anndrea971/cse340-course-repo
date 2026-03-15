@@ -40,18 +40,19 @@ app.get('/organizations', async (_req, res) => {
 });
 
 // 2. Updated Projects Route
-app.get('/projects', async (_req, res) => {
+app.get("/projects", async (req, res) => {
   try {
-    const projects = await getAllProjects();
-    res.render('projects', { 
-      title: 'Service Projects', 
-      projects: projects 
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal Server Error");
+    // Example: query from database
+    const projects = await db.query("SELECT * FROM projects ORDER BY project_date");
+
+    // Pass projects to the template
+    res.render("projects", { projects });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Server error");
   }
 });
+
 
 app.get('/categories', async (_req, res) => {
   const title = 'Categories';

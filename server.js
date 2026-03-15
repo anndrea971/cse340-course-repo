@@ -38,12 +38,19 @@ app.get('/', async (req, res) => {
 });
 
 app.get('/organizations', async (req, res) => {
+  try{
+    const result = await pool.query('SELECT * FROM organizations');
     const organizations = await getAllOrganizations(); 
     const title = 'Our Partner Organizations';
-    
-    res.render('organizations', { title });
+res.render('organizations', { 
+            title: 'Our Partners', 
+            organizations: organizations 
+        });
+} catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
 });
-
 app.get('/projects', async (req, res) => {
     const title = 'Service Projects';
     res.render('projects', { title });

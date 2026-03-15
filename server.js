@@ -42,19 +42,27 @@ app.get('/organizations', async (_req, res) => {
 // 2. Updated Projects Route
 app.get("/projects", async (req, res) => {
   try {
-    // Example: query from your database
-    const result = await db.query("SELECT * FROM projects ORDER BY project_date");
+    // Query your Postgres database
+    const result = await pool.query(`
+      SELECT 
+        date AS project_date, 
+        name AS title, 
+        location AS organization_name
+      FROM organization
+      ORDER BY date
+    `);
 
-    // result.rows if you’re using pg (Postgres)
-    const projects = result.rows;
-
-    // Pass projects into the template
-    res.render("projects", { projects });
+    // Pass the rows into the template
+    res.render("projects", { 
+      title: "Service Projects", 
+      projects: result.rows 
+    });
   } catch (err) {
     console.error(err);
     res.status(500).send("Server error");
   }
 });
+
 
 
 

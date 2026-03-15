@@ -40,17 +40,14 @@ app.get('/organizations', async (_req, res) => {
 
 app.get('/projects', async (_req, res) => {
   try {
-    const projectsData = await getAllProjects();
+    const projects = await getAllProjects(); 
     res.render('projects', { 
       title: 'Service Projects', 
-      projects: projectsData || [] 
+      projects: projects 
     });
   } catch (error) {
-    console.error("Route Error:", error);
-    res.render('projects', { 
-      title: 'Service Projects', 
-      projects: [] 
-    });
+    console.error(error);
+    res.status(500).send("Internal Server Error");
   }
 });
 

@@ -39,27 +39,23 @@ app.get('/organizations', async (_req, res) => {
 });
 
 // 2. Updated Projects Route
+// server.js
 app.get('/projects', async (req, res) => {
   try {
-    // Attempt to get data from database
-    let projects = await getAllProjects();
+    console.log("Attempting to fetch projects...");
+    const projectsData = await getAllProjects();
     
-    // If for some reason projects comes back empty/undefined, make it an empty array
-    if (!projects) {
-      console.log("Warning: getAllProjects returned nothing. Using empty array.");
-      projects = [];
-    }
+    console.log("Data fetched successfully:", projectsData ? projectsData.length : "null");
 
     res.render('projects', { 
       title: 'Service Projects', 
-      projects: projects 
+      projects: projectsData || [] // If data is null/undefined, send an empty array
     });
   } catch (error) {
     console.error("Route Error:", error);
-    // Even on error, render the page with an empty array so EJS doesn't crash
     res.render('projects', { 
       title: 'Service Projects', 
-      projects: [] 
+      projects: [] // Send empty array on error so EJS doesn't crash
     });
   }
 });

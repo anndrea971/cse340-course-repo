@@ -58,12 +58,8 @@ app.get('/categories', async (_req, res) => {
   res.render('categories', { title });
 });
 
-app.listen(PORT, async () => {
-  try {
-    await testConnection();
+app.listen(PORT, () => {
     console.log(`Server is running at http://127.0.0.1:${PORT}`);
-    console.log(`Environment: ${NODE_ENV}`);
-  } catch (error) {
-    console.error('Error connecting to the database:', error);
-  }
+    // Check connection separately if needed, but don't let it block the listen process
+    testConnection().catch(err => console.error("DB Connection failed:", err));
 });

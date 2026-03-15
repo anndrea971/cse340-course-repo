@@ -4,7 +4,7 @@
     
     <h2>Upcoming Service Projects</h2> 
     <ul>
-        <% projects.forEach(project => { %>
+        <% if (Array.isArray(projects)) { projects.forEach(project => { %>
             <li>
                 <strong>
                     <%= new Date(project.date).toLocaleDateString('en-US', { 
@@ -16,7 +16,7 @@
                 <%= project.name %> 
                 (<%= project.location %>)
             </li>
-        <% }); %>
+        <% }); } %>
     </ul>
 </main>
 <%- include('partials/footer') %>

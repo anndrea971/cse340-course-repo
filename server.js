@@ -52,6 +52,7 @@ app.get("/projects", async (req, res) => {
       ORDER BY date
     `);
 
+    console.log(result.rows);
     // Pass the rows into the template
     res.render("projects", { 
       title: "Service Projects", 
@@ -62,8 +63,6 @@ app.get("/projects", async (req, res) => {
     res.status(500).send("Server error");
   }
 });
-
-
 
 
 app.get('/categories', async (_req, res) => {

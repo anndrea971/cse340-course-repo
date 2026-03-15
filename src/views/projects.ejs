@@ -4,19 +4,23 @@
     
     <h2>Upcoming Service Projects</h2> 
     <ul>
-        <% if (Array.isArray(projects)) { projects.forEach(project => { %>
-            <li>
-                <strong>
-                    <%= new Date(project.project_date).toLocaleDateString(...) %>
-                        month: 'long', 
-                        day: 'numeric', 
-                        year: 'numeric' 
-                    }) %>
-                </strong>: 
-                <%= project.name %> 
-                (<%= project.location %>)
-            </li>
-        <% }); } %>
+        <% if (projects && projects.length > 0) { %>
+            <% projects.forEach(project => { %>
+                <li>
+                    <strong>
+                        <%= new Date(project.project_date).toLocaleDateString('en-US', { 
+                            month: 'long', 
+                            day: 'numeric', 
+                            year: 'numeric' 
+                        }) %>
+                    </strong>: 
+                    <%= project.title %> 
+                    (<%= project.organization_name %>)
+                </li>
+            <% }); %>
+        <% } else { %>
+            <li>No projects found.</li>
+        <% } %>
     </ul>
 </main>
 <%- include('partials/footer') %>

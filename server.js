@@ -39,27 +39,28 @@ app.get('/organizations', async (_req, res) => {
 });
 
 // 2. Updated Projects Route
-app.get("/projects", async (req, res) => {
+app.get('/projects', async (req, res) => {
   try {
-    // Query your Postgres database
-    const result = await pool.query(`
-      SELECT 
-        date AS project_date, 
-        name AS title, 
-        location AS organization_name
-      FROM organization
-      ORDER BY date
-    `);
+    // Attempt to get data from database
+    let projects = await getAllProjects();
+    
+    // If for some reason projects comes back empty/undefined, make it an empty array
+    if (!projects) {
+      console.log("Warning: getAllProjects returned nothing. Using empty array.");
+      projects = [];
+    }
 
-    console.log(result.rows);
-    // Pass the rows into the template
-    res.render("projects", { 
-      title: "Service Projects", 
-      projects: result.rows 
+    res.render('projects', { 
+      title: 'Service Projects', 
+      projects: projects 
     });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Server error");
+  } catch (error) {
+    console.error("Route Error:", error);
+    // Even on error, render the page with an empty array so EJS doesn't crash
+    res.render('projects', { 
+      title: 'Service Projects', 
+      projects: [] 
+    });
   }
 });
 

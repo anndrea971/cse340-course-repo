@@ -1,3 +1,4 @@
+import { getAllCategories } from './src/models/categories.js';
 import express from 'express';
 import { fileURLToPath } from 'url';
 import path from 'path';
@@ -53,16 +54,6 @@ app.get('/projects', async (_req, res) => {
 });
 
 app.get('/categories', async (_req, res) => {
-  const title = 'Categories';
-  res.render('categories', { title });
-});
-
-app.listen(PORT, () => {
-    console.log(`Server is running at http://127.0.0.1:${PORT}`);
-    testConnection().catch(err => console.error("DB Connection failed:", err));
-});
-
-app.get('/categories', async (_req, res) => {
   try {
     const categories = await getAllCategories();
     res.render('categories', { 
@@ -73,4 +64,9 @@ app.get('/categories', async (_req, res) => {
     console.error(error);
     res.status(500).send("Internal Server Error");
   }
+});
+
+app.listen(PORT, () => {
+    console.log(`Server is running at http://127.0.0.1:${PORT}`);
+    testConnection().catch(err => console.error("DB Connection failed:", err));
 });

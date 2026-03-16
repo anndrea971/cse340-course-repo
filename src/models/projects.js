@@ -7,7 +7,7 @@ export async function getAllProjects() {
   try {
     const sql = `SELECT p.*, o.name AS organization_name 
                  FROM public.projects p 
-                 JOIN public.organizations o 
+                 JOIN public.organization o 
                  ON p.organization_id = o.organization_id 
                  ORDER BY p.project_date ASC`;
     const data = await db.query(sql);

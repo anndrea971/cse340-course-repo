@@ -1,4 +1,4 @@
-import pool from './db.js';
+import db from './db.js';
 
 /* ***************************
  * Get all projects joined with organization names
@@ -10,7 +10,7 @@ export async function getAllProjects() {
                  JOIN public.organizations o 
                  ON p.organization_id = o.organization_id 
                  ORDER BY p.project_date ASC`;
-    const data = await pool.query(sql);
+    const data = await db.query(sql);
     return data.rows;
   } catch (error) {
     console.error("getAllProjects error: " + error);

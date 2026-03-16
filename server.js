@@ -1,4 +1,3 @@
-import { getAllCategories } from './src/models/categories.js';
 import express from 'express';
 import { fileURLToPath } from 'url';
 import path from 'path';

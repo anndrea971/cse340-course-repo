@@ -4,6 +4,7 @@ import path from 'path';
 import { testConnection } from './src/models/db.js';
 import { getAllOrganizations } from './src/models/organizations.js';
 import { getAllProjects } from './src/models/projects.js'; 
+import { getAllCategories } from './src/models/categories.js';
 
 const NODE_ENV = process.env.NODE_ENV?.toLowerCase() || 'production';
 const PORT = process.env.PORT || 3000;
@@ -59,4 +60,17 @@ app.get('/categories', async (_req, res) => {
 app.listen(PORT, () => {
     console.log(`Server is running at http://127.0.0.1:${PORT}`);
     testConnection().catch(err => console.error("DB Connection failed:", err));
+});
+
+app.get('/categories', async (_req, res) => {
+  try {
+    const categories = await getAllCategories();
+    res.render('categories', { 
+      title: 'Categories', 
+      categories: categories 
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
 });

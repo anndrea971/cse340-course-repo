@@ -1,6 +1,6 @@
 import db from './db.js';
 
-export async function getAllCategories() {
+const getAllProjects = async () => {
   try {
     const sql = `SELECT * FROM public.category ORDER BY name ASC`;
     const data = await db.query(sql);
@@ -10,3 +10,5 @@ export async function getAllCategories() {
     throw error;
   }
 }
+
+export {getAllProjects};

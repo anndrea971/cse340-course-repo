@@ -3,7 +3,7 @@
   <h1><%= title %></h1>
   <p>Explore our service project categories:</p>
   <ul>
-    <% if (categories && categories.length > 0) { %>
+    <% if (locals.categories && locals.categories.length > 0) { %>
       <% categories.forEach(category => { %>
         <li><%= category.name %></li>
       <% }); %>

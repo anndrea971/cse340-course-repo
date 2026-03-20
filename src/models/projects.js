@@ -1,9 +1,6 @@
 import db from './db.js';
 
-/* ***************************
- * Get all projects joined with organization names
- * ************************** */
-export async function getAllProjects() {
+const getAllProjects = async () => {
   try {
     const sql = `SELECT p.*, o.name AS organization_name 
                  FROM public.projects p 
@@ -17,3 +14,5 @@ export async function getAllProjects() {
     throw error;
   }
 }
+
+export {getAllProjects};

@@ -11,4 +11,4 @@ const getAllProjects = async () => {
   }
 }
 
-export {getAllProjects};
+export {getAllCategories};

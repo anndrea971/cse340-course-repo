@@ -12,7 +12,7 @@ const showOrganizationsPage = async (req, res) => {
 // Export any controller functions
 export { showOrganizationsPage };
 
-const showOrganizationsDetailsPage = async (req, res) => {
+const showOrganizationDetailsPage = async (req, res) => {
     const organizationId = req.params.id;
     const organizationDetails = await getOrganizationDetails(organizationId);
     const projects = await getProjectsByOrganizationId(organizationId);
@@ -21,4 +21,4 @@ const showOrganizationsDetailsPage = async (req, res) => {
     res.render('organization', {title, organizationDetails, projects});
 };
 
-export { showOrganizationsPage, showOrganizationsDetailsPage };
+export { showOrganizationsPage, showOrganizationDetailsPage };

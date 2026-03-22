@@ -2,9 +2,7 @@ import express from 'express';
 import { fileURLToPath } from 'url';
 import path from 'path';
 import { testConnection } from './src/models/db.js';
-import { getAllOrganizations } from './src/models/organizations.js';
-import { getAllProjects } from './src/models/projects.js'; 
-import { getAllCategories } from './src/models/categories.js';
+import router from './src/controllers/routes.js';
 
 const NODE_ENV = process.env.NODE_ENV?.toLowerCase() || 'production';
 const PORT = process.env.PORT || 3000;
@@ -29,64 +27,8 @@ app.use((req, res, next) => {
     next();
 });
 
-/**
- * Routes
- */
-app.get('/', async (_req, res) => {
-    const title = 'Home';
-    res.render('home', { title });
-});
-
-app.get('/organizations', async (_req, res) => {
-  try {
-    const organizations = await getAllOrganizations(); 
-    res.render('organizations', { 
-      title: 'Our Partners', 
-      organizations: organizations 
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal Server Error");
-  }
-});
-
-app.get('/projects', async (_req, res) => {
-  try {
-    const projects = await getAllProjects(); 
-    res.render('projects', { 
-      title: 'Service Projects', 
-      projects: projects 
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal Server Error");
-  }
-});
-
-app.get('/categories', async (_req, res) => {
-  try {
-    const categories = await getAllCategories();
-    res.render('categories', { 
-      title: 'Categories', 
-      categories: categories 
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal Server Error");
-  }
-});
-
-app.listen(PORT, () => {
-    console.log(`Server is running at http://127.0.0.1:${PORT}`);
-    testConnection().catch(err => console.error("DB Connection failed:", err));
-});
-
-// Test route for 500 errors
-app.get('/test-error', (req, res, next) => {
-    const err = new Error('This is a test error');
-    err.status = 500;
-    next(err);
-});
+// Use the imported router to handle routes
+app.use(router);
 
 // Catch-all route for 404 errors
 app.use((req, res, next) => {
@@ -114,4 +56,14 @@ app.use((err, req, res, next) => {
     
     // Render the appropriate error template
     res.status(status).render(`errors/${template}`, context);
+});
+
+app.listen(PORT, async () => {
+  try {
+    await testConnection();
+    console.log(`Server is running at http://127.0.0.1:${PORT}`);
+    console.log(`Environment: ${NODE_ENV}`);
+  } catch (error) {
+    console.error('Error connecting to the database:', error);
+  }
 });

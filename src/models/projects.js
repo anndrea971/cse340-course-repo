@@ -15,26 +15,27 @@ const getAllProjects = async () => {
   }
 }
 
-export {getAllProjects};
+// DELETE THIS LINE HERE -> export {getAllProjects};
 
 const getProjectsByOrganizationId = async (organizationId) => {
-      const query = `
-        SELECT
-          project_id,
-          organization_id,
-          title,
-          description,
-          location,
-          date
-        FROM project
-        WHERE organization_id = $1
-        ORDER BY date;
-      `;
-      
-      const query_params = [organizationId];
-      const result = await db.query(query, query_params);
+    const query = `
+      SELECT
+        project_id,
+        organization_id,
+        title,
+        description,
+        location,
+        date
+      FROM project
+      WHERE organization_id = $1
+      ORDER BY date;
+    `;
+    
+    const query_params = [organizationId];
+    const result = await db.query(query, query_params);
 
-      return result.rows;
+    return result.rows;
 };
 
+// This one at the bottom covers BOTH functions, so it's all you need!
 export { getAllProjects, getProjectsByOrganizationId };

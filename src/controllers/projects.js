@@ -1,19 +1,36 @@
+// src/controllers/projects.js
 import { getUpcomingProjects, getProjectDetails } from '../models/projects.js';
+import { getCategoriesByProject } from '../models/categories.js';
 
 const NUMBER_OF_UPCOMING_PROJECTS = 5;
 
-// Updated function for the list page
 const showProjectsPage = async (req, res) => {
     const projects = await getUpcomingProjects(NUMBER_OF_UPCOMING_PROJECTS);
     const title = 'Upcoming Service Projects';
     res.render('projects', { title, projects });
 };
 
-// New function for the single project details page
-const showProjectDetailsPage = async (req, res) => {
-    const id = req.params.id;
-    const project = await getProjectDetails(id);
-    res.render('project', { project });
+const showProjectDetailsPage = async (req, res, next) => {
+    try {
+        const id = req.params.id;
+        const project = await getProjectDetails(id);
+
+        if (!project) {
+            return res.status(404).render('errors/404', { title: 'Project not found' });
+        }
+
+        // 🔗 ESTA ES LA CONEXIÓN QUE FALTA:
+        const categories = await getCategoriesByProject(id);
+
+        // Pasamos tanto 'project' como 'categories'
+        res.render('project', { 
+            title: project.title, 
+            project, 
+            categories 
+        });
+    } catch (error) {
+        next(error);
+    }
 };
 
 export { showProjectsPage, showProjectDetailsPage };

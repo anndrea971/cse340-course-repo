@@ -15,9 +15,8 @@ const getAllProjects = async () => {
   }
 }
 
-// DELETE THIS LINE HERE -> export {getAllProjects};
-
 const getProjectsByOrganizationId = async (organizationId) => {
+    // Usamos AS date para que tu EJS no se rompa si busca .date
     const query = `
       SELECT
         project_id,
@@ -25,33 +24,31 @@ const getProjectsByOrganizationId = async (organizationId) => {
         title,
         description,
         location,
-        date
-      FROM project
+        project_date AS date 
+      FROM public.projects
       WHERE organization_id = $1
-      ORDER BY date;
+      ORDER BY project_date ASC;
     `;
     
     const query_params = [organizationId];
     const result = await db.query(query, query_params);
-
     return result.rows;
 };
 
 const getUpcomingProjects = async (number_of_projects) => {
   const sql = `
-   SELECT p.*, o.name AS organization_name 
-        FROM projects p 
-        JOIN organization o ON p.organization_id = o.organization_id 
-        WHERE p.project_date >= CURRENT_DATE 
-        ORDER BY p.project_date ASC 
-        LIMIT $1`;
+    SELECT p.*, o.name AS organization_name 
+    FROM public.projects p 
+    JOIN public.organization o ON p.organization_id = o.organization_id 
+    WHERE p.project_date >= CURRENT_DATE 
+    ORDER BY p.project_date ASC 
+    LIMIT $1`;
   const result = await db.query(sql, [number_of_projects]);
   return result.rows;
 };
 
 /**
- * NEW FUNCTION: getProjectDetails
- * Retrieves a single project by its ID
+ * getProjectDetails con soporte para categorías (Interconexión)
  */
 const getProjectDetails = async (id) => {
   const sql = `
@@ -68,8 +65,7 @@ const getProjectDetails = async (id) => {
     WHERE p.project_id = $1;
   `;
   const result = await db.query(sql, [id]);
-  return result.rows[0]; // Returns the single object
+  return result.rows[0];
 };
 
-// This one at the bottom covers BOTH functions, so it's all you need!
 export { getAllProjects, getProjectsByOrganizationId, getUpcomingProjects, getProjectDetails };

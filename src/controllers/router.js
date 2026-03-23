@@ -21,6 +21,7 @@ router.get('/organization/:id', showOrganizationDetailsPage);
 // Route for specific project details page
 router.get('/project/:id', showProjectDetailsPage); 
 
+router.get('/category/:id', showCategoryDetailsPage);
 // Error-handling routes
 router.get('/test-error', testErrorPage);
 

@@ -1,21 +1,25 @@
-import express from 'express'; // Keep imports at the very top
+import express from 'express'; 
 import { showHomePage } from './index.js';
-import { showOrganizationsPage, showOrganizationDetailsPage } from './organizations.js'; // Combined these
-import { showProjectsPage } from './projects.js';
+import { showOrganizationsPage, showOrganizationDetailsPage } from './organizations.js'; 
+import { showProjectsPage, showProjectDetailsPage } from './projects.js'; // Added showProjectDetailsPage here
 import { showCategoriesPage } from './categories.js';
 import { testErrorPage } from './errors.js';
 
-// 1. INITIALIZE FIRST (Move this up!)
 const router = express.Router();
 
-// 2. NOW USE IT (Routes follow initialization)
+// Home & General Lists
 router.get('/', showHomePage);
 router.get('/organizations', showOrganizationsPage);
 router.get('/projects', showProjectsPage);
 router.get('/categories', showCategoriesPage);
 
+// --- New/Updated Detail Routes ---
+
 // Route for organization details page
 router.get('/organization/:id', showOrganizationDetailsPage);
+
+// Route for specific project details page
+router.get('/project/:id', showProjectDetailsPage); 
 
 // Error-handling routes
 router.get('/test-error', testErrorPage);

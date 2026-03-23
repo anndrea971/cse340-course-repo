@@ -37,5 +37,47 @@ const getProjectsByOrganizationId = async (organizationId) => {
     return result.rows;
 };
 
+const getUpcomingProjects = async (number_of_projects) => {
+  const sql = `
+    SELECT 
+      p.project_id, 
+      p.title, 
+      p.description, 
+      p.date, 
+      p.location, 
+      p.organization_id, 
+      o.name AS organization_name
+    FROM public.projects p
+    JOIN public.organization o ON p.organization_id = o.organization_id
+    WHERE p.date >= CURRENT_DATE
+    ORDER BY p.date ASC
+    LIMIT $1;
+  `;
+  const result = await db.query(sql, [number_of_projects]);
+  return result.rows;
+};
+
+/**
+ * NEW FUNCTION: getProjectDetails
+ * Retrieves a single project by its ID
+ */
+const getProjectDetails = async (id) => {
+  const sql = `
+    SELECT 
+      p.project_id, 
+      p.title, 
+      p.description, 
+      p.date, 
+      p.location, 
+      p.organization_id, 
+      o.name AS organization_name
+    FROM public.projects p
+    JOIN public.organization o ON p.organization_id = o.organization_id
+    WHERE p.project_id = $1;
+  `;
+  const result = await db.query(sql, [id]);
+  return result.rows[0]; // Returns the single object
+};
+
 // This one at the bottom covers BOTH functions, so it's all you need!
-export { getAllProjects, getProjectsByOrganizationId };
+export { getAllProjects, getProjectsByOrganizationId, getUpcomingProjects, getProjectDetails };

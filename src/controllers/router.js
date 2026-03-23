@@ -2,7 +2,7 @@ import express from 'express';
 import { showHomePage } from './index.js';
 import { showOrganizationsPage, showOrganizationDetailsPage } from './organizations.js'; 
 import { showProjectsPage, showProjectDetailsPage } from './projects.js'; // Added showProjectDetailsPage here
-import { showCategoriesPage } from './categories.js';
+import { showCategoriesPage, showCategoryDetailsPage } from './categories.js';
 import { testErrorPage } from './errors.js';
 
 const router = express.Router();

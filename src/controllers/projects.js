@@ -13,7 +13,7 @@ const showProjectsPage = async (req, res) => {
 const showProjectDetailsPage = async (req, res) => {
     const id = req.params.id;
     const project = await getProjectDetails(id);
-    res.render('partials/projects', { project });
+    res.render('partials/project', { project });
 };
 
 export { showProjectsPage, showProjectDetailsPage };

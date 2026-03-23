@@ -6,14 +6,14 @@ const NUMBER_OF_UPCOMING_PROJECTS = 5;
 const showProjectsPage = async (req, res) => {
     const projects = await getUpcomingProjects(NUMBER_OF_UPCOMING_PROJECTS);
     const title = 'Upcoming Service Projects';
-    res.render('partials/projects', { title, projects });
+    res.render('views/projects', { title, projects });
 };
 
 // New function for the single project details page
 const showProjectDetailsPage = async (req, res) => {
     const id = req.params.id;
     const project = await getProjectDetails(id);
-    res.render('partials/project', { project });
+    res.render('views/project', { project });
 };
 
 export { showProjectsPage, showProjectDetailsPage };

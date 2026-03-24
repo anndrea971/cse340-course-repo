@@ -2,7 +2,7 @@
 import { getUpcomingProjects, getProjectDetails } from '../models/projects.js';
 import { getCategoriesByProject } from '../models/categories.js';
 
-const NUMBER_OF_UPCOMING_PROJECTS = 5;
+const NUMBER_OF_UPCOMING_PROJECTS = 15;
 
 const showProjectsPage = async (req, res) => {
     const projects = await getUpcomingProjects(NUMBER_OF_UPCOMING_PROJECTS);

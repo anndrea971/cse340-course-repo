@@ -1,44 +1,38 @@
 <%- include('partials/header') %>
+
 <main>
     <h1><%= project.title %></h1>
     
-    <p><strong>Description:</strong> <%= project.description %></p>
-    
-    <p><strong>Date:</strong> 
-        <%= new Date(project.project_date).toLocaleDateString('en-US', { 
-            weekday: 'long',
-            month: 'long', 
-            day: 'numeric', 
-            year: 'numeric' 
-        }) %>
-    </p>
-    
-    <p><strong>Location:</strong> <%= project.location %></p>
-    
-    <p><strong>Partner Organization:</strong> 
-        <a href="/organization/<%= project.organization_id %>">
-            <%= project.organization_name %>
-        </a>
-    </p>
-
-    <section class="project-categories">
-        <h3>Related Categories:</h3>
+    <div class="project-details">
+        <p><strong>Organization:</strong> 
+            <a href="/organization/<%= project.organization_id %>">
+                <%= project.organization_name %>
+            </a>
+        </p>
+        
+        <p><strong>Date:</strong> <%= project.date %></p>
+        <p><strong>Location:</strong> <%= project.location %></p>
+        <p><strong>Description:</strong> <%= project.description %></p>
+        
+        <!-- Add Category Tags Section -->
         <% if (categories && categories.length > 0) { %>
-            <ul>
-                <% categories.forEach(cat => { %>
-                    <li>
-                        <a href="/category/<%= cat.category_id %>">
-                            <%= cat.name %>
+            <div class="categories-section">
+                <p><strong>Categories:</strong></p>
+                <div class="category-tags">
+                    <% categories.forEach(category => { %>
+                        <a href="/category/<%= category.category_id %>" 
+                           class="category-tag">
+                            <%= category.name %>
                         </a>
-                    </li>
-                <% }) %>
-            </ul>
+                    <% }) %>
+                </div>
+            </div>
         <% } else { %>
-            <p>This project has no assigned categories.</p>
+            <p><em>No categories assigned to this project.</em></p>
         <% } %>
-    </section>
-
-    <hr>
-    <p><a href="/projects">← Back to Upcoming Projects</a></p>
+    </div>
+    
+    <p><a href="/projects">Back to all projects</a></p>
 </main>
+
 <%- include('partials/footer') %>

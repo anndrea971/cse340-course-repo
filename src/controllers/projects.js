@@ -19,7 +19,6 @@ const showProjectDetailsPage = async (req, res, next) => {
             return res.status(404).render('errors/404', { title: 'Project not found' });
         }
 
-        // 🔗 ESTA ES LA CONEXIÓN QUE FALTA:
         const categories = await getCategoriesByProject(id);
 
         // Pasamos tanto 'project' como 'categories'

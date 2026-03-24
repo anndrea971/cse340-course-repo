@@ -1,23 +1,35 @@
 <%- include('partials/header') %>
-<h1>Category: <%= categoryName %></h1>
+<main>
+    <h1><%= category.name %></h1>
+    
+    <h2>Service Projects in this Category</h2>
+    
+    <% if (projects.length > 0) { %>
+        <ul class="project-list">
+            <% projects.forEach(project => { %>
+                <li>
+                    <a href="/project/<%= project.project_id %>">
+                        <%= project.title %>
+                    </a>
+                    <br>
+                    <small>
+                        Organization: 
+                        <a href="/organization/<%= project.organization_id %>">
+                            <%= project.organization_name %>
+                        </a>
+                    </small>
+                    <br>
+                    <small>Date: <%= project.date %></small>
+                    <br>
+                    <small>Location: <%= project.location %></small>
+                </li>
+            <% }) %>
+        </ul>
+    <% } else { %>
+        <p>No service projects currently in this category.</p>
+    <% } %>
+    
+    <p><a href="/categories">Back to all categories</a></p>
+</main>
 
-<p>Below are the projects associated with this category:</p>
-
-<% if (projects.length > 0) { %>
-    <ul class="project-links">
-        <% projects.forEach(project => { %>
-            <li>
-                <a href="/project/<%= project.project_id %>">
-                    <%= project.title %>
-                </a>
-                <span>(Date: <%= project.project_date %>)</span>
-            </li>
-        <% }) %>
-    </ul>
-<% } else { %>
-    <p>No projects found for this category yet.</p>
-<% } %>
-
-<hr>
-<a href="/categories">← Back to All Categories</a>
 <%- include('partials/footer') %>

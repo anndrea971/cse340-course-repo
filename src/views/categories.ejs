@@ -1,18 +1,20 @@
 <%- include('partials/header') %>
-<h1>All Project Categories</h1>
 
-<p>Select a category to see its related projects:</p>
-
-<ul class="category-list">
-    <% categories.forEach(category => { %>
-        <li>
-            <a href="/category/<%= category.category_id %>">
-                <%= category.name %>
-            </a>
-        </li>
-    <% }) %>
-</ul>
-
-<hr>
-<a href="/">← Back to Home</a>
+<main>
+    <h1>All Project Categories</h1>
+    
+    <% if (categories.length > 0) { %>
+        <ul>
+            <% categories.forEach(category => { %>
+                <li>
+                    <a href="/category/<%= category.category_id %>">
+                        <%= category.name %>
+                    </a>
+                </li>
+            <% }) %>
+        </ul>
+    <% } else { %>
+        <p>No categories found.</p>
+    <% } %>
+</main>
 <%- include('partials/footer') %>

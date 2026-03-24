@@ -1,19 +1,46 @@
 <%- include('partials/header') %>
-<main>
-  <h1><%= project.title %></h1>
+ <main>
+    <h1><%= project.title %></h1>
+    <p><strong>Description:</strong> <%= project.description %></p>
+    <p><strong>Date:</strong>
+        <%= new Date(project.project_date).toLocaleDateString('en-US', {
+            weekday: 'long',
+            month: 'long',
+            day: 'numeric',
+            year: 'numeric'
+        }) %>
+    </p>
 
-  <p><%= project.description %></p>
-  <p><strong>Date:</strong> <%= project.start_date.toLocaleDateString() %></p>
-  <p><strong>Location:</strong> <%= project.location %></p>
-  <p><strong>Organization:</strong> <a href="/organization/<%= project.organization_id %>"><%= project.organization_name %></a></p>
+    <p><strong>Location:</strong> <%= project.location %></p>
+    <p><strong>Partner Organization:</strong>
 
-  <% if (categories.length > 0) { %>
-    <div class="category-tags">
-      <strong>Categories:</strong>
-      <% categories.forEach(category => { %>
-        <a href="/category/<%= category.category_id %>" class="category-tag"><%= category.name %></a>
-      <% }); %>
-    </div>
-  <% } %>
+        <a href="/organization/<%= project.organization_id %>">
+
+            <%= project.organization_name %>
+
+        </a>
+
+    </p>
+
+    <section class="project-categories">
+        <h3>Related Categories:</h3>
+        <% if (categories && categories.length > 0) { %>
+            <ul>
+                <% categories.forEach(cat => { %>
+                    <li>
+                        <a href="/category/<%= cat.category_id %>">
+                            <%= cat.name %>
+                        </a>
+                    </li>
+                <% }) %>
+            </ul>
+        <% } else { %>
+            <p>This project has no assigned categories.</p>
+        <% } %>
+
+    </section>
+    <hr>
+    <p><a href="/projects">← Back to Upcoming Projects</a></p>
+
 </main>
 <%- include('partials/footer') %>

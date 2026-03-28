@@ -32,6 +32,13 @@ app.use(session({
 // Use flash message middleware
 app.use(flash);
 
+app.use((req, res, next) => {
+  // Check if req.flash exists (provided by your flash middleware)
+  // and make it available to all EJS templates via res.locals
+  res.locals.flash = typeof req.flash === 'function' ? req.flash : () => ({});
+  next();
+});
+
 // Allow Express to receive and process common POST data
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());

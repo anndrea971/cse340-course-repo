@@ -1,98 +1,177 @@
--- ========================================
--- 1. CLEANUP: DROP TABLES IF THEY EXIST
--- ========================================
-DROP TABLE IF EXISTS project_category CASCADE;
-DROP TABLE IF EXISTS projects CASCADE;
-DROP TABLE IF EXISTS category CASCADE;
-DROP TABLE IF EXISTS organization CASCADE;
+-----------------------------------------------
+-- Drop tables in dependency order (children first)
+-----------------------------------------------
 
--- ========================================
--- 2. TABLE: ORGANIZATIONS
--- ========================================
-CREATE TABLE organization (
-    organization_id SERIAL PRIMARY KEY,
-    name VARCHAR(150) NOT NULL,
-    description TEXT NOT NULL,
-    contact_email VARCHAR(255) NOT NULL,
-    logo_filename VARCHAR(255) NOT NULL
+DROP TABLE IF EXISTS public.project_category CASCADE;
+DROP TABLE IF EXISTS public.project CASCADE;
+DROP TABLE IF EXISTS public.organization CASCADE;
+DROP TABLE IF EXISTS public.category CASCADE;
+
+DROP SEQUENCE IF EXISTS organization_id_seq CASCADE;
+DROP SEQUENCE IF EXISTS project_id_seq CASCADE;
+DROP SEQUENCE IF EXISTS category_id_seq CASCADE;
+
+-----------------------------------------------
+-- Organization
+-----------------------------------------------
+
+CREATE SEQUENCE organization_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+CREATE TABLE public.organization
+(
+    organization_id integer                                             NOT NULL DEFAULT nextval('organization_id_seq'::regclass),
+    name            character varying(150) COLLATE pg_catalog."default" NOT NULL,
+    description     text COLLATE pg_catalog."default"                   NOT NULL,
+    contact_email   character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    logo_filename   character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    PRIMARY KEY (organization_id)
 );
 
-INSERT INTO organization (name, description, contact_email, logo_filename)
-VALUES 
-('BrightFuture Builders', 'A nonprofit focused on community infrastructure through sustainable construction.', 'info@brightfuturebuilders.org', 'brightfuture-logo.png'),
-('GreenHarvest Growers', 'An urban farming collective promoting food sustainability and education.', 'contact@greenharvest.org', 'greenharvest-logo.png'),
-('UnityServe Volunteers', 'A volunteer coordination group supporting local charities and service initiatives.', 'hello@unityserve.org', 'unityserve-logo.png');
+-----------------------------------------------
+-- Category
+-----------------------------------------------
 
--- ========================================
--- 3. TABLE: CATEGORIES
--- ========================================
-CREATE TABLE category (
-    category_id SERIAL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL UNIQUE
+CREATE SEQUENCE category_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+CREATE TABLE public.category
+(
+    category_id integer                NOT NULL DEFAULT nextval('category_id_seq'::regclass),
+    name        character varying(150) NOT NULL,
+    description character varying(255),
+    PRIMARY KEY (category_id)
 );
 
-INSERT INTO category (name) VALUES
-('Environmental'), 
-('Education'), 
-('Community Building'), 
-('Health & Wellness'), 
-('Food Security');
+-----------------------------------------------
+-- Project
+-----------------------------------------------
 
--- ========================================
--- 4. TABLE: PROJECTS (Exactly 15 Projects)
--- ========================================
-CREATE TABLE projects (
-    project_id SERIAL PRIMARY KEY,
-    organization_id INTEGER NOT NULL REFERENCES organization(organization_id),
-    title VARCHAR(100) NOT NULL,
-    description TEXT,
-    project_date DATE NOT NULL,
-    start_time TIME,
-    end_time TIME,
-    location VARCHAR(255),
-    volunteers_needed INTEGER
+CREATE SEQUENCE project_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+CREATE TABLE public.project
+(
+    project_id      integer                NOT NULL DEFAULT nextval('project_id_seq'::regclass),
+    organization_id integer                NOT NULL REFERENCES public.organization (organization_id),
+    title           character varying(255) NOT NULL,
+    description     character varying(255),
+    location        character varying(255),
+    start_date      date,
+    PRIMARY KEY (project_id)
 );
 
-INSERT INTO projects (organization_id, title, description, project_date, start_time, end_time, location, volunteers_needed)
-VALUES
--- Environmental (Proyectos 1 al 3)
-(1, 'Community Garden Build', 'Help us build raised beds for the local area.', '2026-04-01', '09:00', '12:00', 'City Park', 10),
-(2, 'Irrigation Pipe Repair', 'Fixing leaks in the community garden irrigation system.', '2026-05-15', '08:00', '11:00', 'Community Garden', 6),
-(1, 'River Restoration', 'Cleaning up the riverbank and planting native species.', '2026-06-12', '08:00', '14:00', 'Riverside Park', 15),
+-----------------------------------------------
+-- Project_Category (join table for many-to-many)
+-----------------------------------------------
 
--- Education (Proyectos 4 al 6)
-(3, 'After-School Tutoring', 'Helping middle school students with math and science homework.', '2026-04-15', '15:00', '17:00', 'Main Library', 5),
-(2, 'Urban Farming Class', 'Teaching locals how to start their own balcony gardens.', '2026-05-20', '10:00', '12:00', 'GreenHarvest HQ', 8),
-(1, 'STEM Workshop', 'Leading a building workshop for kids.', '2026-06-18', '13:00', '16:00', 'Community Center', 10),
-
--- Community Building (Proyectos 7 al 9)
-(1, 'Shelter Painting', 'Refreshing the interior walls of the downtown shelter.', '2026-04-10', '10:00', '14:00', 'Main Shelter', 8),
-(3, 'Neighborhood Cleanup', 'Picking up litter in the downtown business district.', '2026-05-25', '08:00', '11:00', 'Downtown', 20),
-(3, 'Mural Painting', 'Creating a community mural at the youth center.', '2026-06-05', '10:00', '16:00', 'Community Center', 20),
-
--- Health & Wellness (Proyectos 10 al 12)
-(1, 'Mental Health Walk', 'A community walk to raise awareness for mental health.', '2026-04-22', '09:00', '11:00', 'City Trail', 30),
-(3, 'Yoga in the Park', 'Free outdoor yoga session for beginners.', '2026-06-01', '07:00', '09:00', 'City Park', 15),
-(2, 'Senior Wellness Check', 'Delivering care packages to local seniors.', '2026-06-10', '10:00', '13:00', 'Senior Center', 10),
-
--- Food Security (Proyectos 13 al 15)
-(2, 'Spring Seed Sowing', 'Planting heirloom tomato and pepper seeds.', '2026-05-10', '09:00', '12:00', 'Community Garden', 12),
-(3, 'Food Bank Sorting', 'Sorting canned goods and preparing donation boxes.', '2026-04-28', '14:00', '18:00', 'Local Food Bank', 15),
-(1, 'Soup Kitchen Volunteer', 'Serving hot meals to those in need.', '2026-05-05', '17:00', '20:00', 'Downtown Shelter', 8);
-
--- ========================================
--- 5. TABLE: UNION (Project Category)
--- ========================================
-CREATE TABLE project_category (
-    project_id INTEGER NOT NULL REFERENCES projects(project_id),
-    category_id INTEGER NOT NULL REFERENCES category(category_id),
+CREATE TABLE public.project_category
+(
+    project_id  integer NOT NULL,
+    category_id integer NOT NULL,
     PRIMARY KEY (project_id, category_id)
 );
 
--- Aquí conectamos exactamente 3 proyectos por cada una de las 5 categorías
-INSERT INTO project_category (project_id, category_id) VALUES
-(1, 1), (2, 1), (3, 1), -- Environmental (Cat 1)
-(4, 2), (5, 2), (6, 2), -- Education (Cat 2)
-(7, 3), (8, 3), (9, 3), -- Community Building (Cat 3)
-(10, 4), (11, 4), (12, 4), -- Health & Wellness (Cat 4)
-(13, 5), (14, 5), (15, 5); -- Food Security (Cat 5)
+-----------------------------------------------
+-- Foreign Keys
+-----------------------------------------------
+
+ALTER TABLE public.project_category
+    ADD FOREIGN KEY (project_id)
+        REFERENCES public.project (project_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION;
+
+ALTER TABLE public.project_category
+    ADD FOREIGN KEY (category_id)
+        REFERENCES public.category (category_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION;
+
+-----------------------------------------------
+-- Data
+-----------------------------------------------
+
+INSERT INTO public.organization (name, description, contact_email, logo_filename)
+VALUES ('BrightFuture Builders', 'A nonprofit focused on improving community infrastructure through sustainable construction projects.',
+        'info@brightfuturebuilders.org', 'brightfuture-logo.png');
+
+INSERT INTO public.organization (name, description, contact_email, logo_filename)
+VALUES ('GreenHarvest Growers', 'An urban farming collective promoting food sustainability and education in local neighborhoods.', 'contact@greenharvest.org',
+        'greenharvest-logo.png');
+
+INSERT INTO public.organization (name, description, contact_email, logo_filename)
+VALUES ('UnityServe Volunteers', 'A volunteer coordination group supporting local charities and service initiatives.', 'hello@unityserve.org',
+        'unityserve-logo.png');
+
+INSERT INTO public.category (category_id, name, description)
+VALUES (DEFAULT, 'Environmental', 'Park cleanups, tree planting, trail maintenance, recycling drives');
+
+INSERT INTO public.category (category_id, name, description)
+VALUES (DEFAULT, 'Hunger & Food Security', 'Food bank sorting, meal preparation, community garden work');
+
+INSERT INTO public.category (category_id, name, description)
+VALUES (DEFAULT, 'Housing & Shelter', 'Habitat for Humanity builds, homeless shelter volunteering, home repair for elderly residents');
+
+INSERT INTO public.category (category_id, name, description)
+VALUES (DEFAULT, 'Education & Literacy', 'Tutoring, school supply drives, library volunteering, reading programs');
+
+INSERT INTO public.category (category_id, name, description)
+VALUES (DEFAULT, 'Health & Wellness', 'Blood drives, hospital volunteering, mental health awareness campaigns, free clinic support');
+
+INSERT INTO public.category (category_id, name, description)
+VALUES (DEFAULT, 'Animal Welfare', 'Shelter volunteering, fostering, pet supply drives, wildlife habitat restoration');
+
+INSERT INTO public.category (category_id, name, description)
+VALUES (DEFAULT, 'Elder Care', 'Nursing home visits, errand assistance, technology tutoring for seniors, companionship programs');
+
+INSERT INTO public.category (category_id, name, description)
+VALUES (DEFAULT, 'Youth & Mentoring', 'After-school programs, Big Brothers/Big Sisters, coaching, career mentoring');
+
+INSERT INTO public.category (category_id, name, description)
+VALUES (DEFAULT, 'Disaster Relief', 'Emergency supply collection, rebuilding efforts, first aid training, preparedness kits');
+
+INSERT INTO public.category (category_id, name, description)
+VALUES (DEFAULT, 'Community Development', 'Neighborhood beautification, civic engagement drives, clothing drives, free legal or tax prep clinics');
+
+INSERT INTO public.project (project_id, organization_id, title, description, location, start_date)
+VALUES (DEFAULT, 1, 'Park Cleanup Day',
+        'Join us for a day of cleaning and beautifying our local park. We will be picking up trash, planting flowers, and making our community space more enjoyable for everyone.',
+        'Central Park', '2024-07-15');
+
+INSERT INTO public.project (project_id, organization_id, title, description, location, start_date)
+VALUES (DEFAULT, 2,'Food Bank Sorting',
+        'Help us sort and organize donations at the local food bank. Your efforts will directly support families in need by ensuring they receive the food they require.',
+        'City Food Bank', '2024-07-20');
+
+INSERT INTO public.project (project_id, organization_id, title, description, location, start_date)
+VALUES (DEFAULT, 3,'Habitat for Humanity Build',
+        'Join us for a weekend of community building and rehabilitation. We will be working with local volunteers to create a sustainable community space for our neighbors.',
+        'Habitat for Humanity', '2024-07-25');
+
+INSERT INTO public.project_category (project_id, category_id)
+VALUES (1, 1);
+
+INSERT INTO public.project_category (project_id, category_id)
+VALUES (1, 3);
+
+INSERT INTO public.project_category (project_id, category_id)
+VALUES (2, 2);
+
+INSERT INTO public.project_category (project_id, category_id)
+VALUES (3, 3);

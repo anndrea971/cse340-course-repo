@@ -1,9 +1,10 @@
-import { getAllOrganizations, getOrganizationDetails } from '../models/organizations.js';
+import { getAllOrganizations, getOrganizationDetails, updateOrganization } from '../models/organizations.js';
 import { createOrganization } from '../models/organization.js';
 import { getProjectsByOrganizationId } from '../models/projects.js';
 import { body, validationResult } from 'express-validator';
 
-
+// Define validation and sanitization rules for organization form
+// Define validation rules for organization form
 const organizationValidation = [
     body('name')
         .trim()
@@ -25,22 +26,21 @@ const organizationValidation = [
         .withMessage('Please provide a valid email address')
 ];
 
-// 1. The main list page (This was the missing piece!)
+// Define any controller functions
 const showOrganizationsPage = async (req, res) => {
-    const organizations = await getAllOrganizations();
-    const title = 'Our Partner Organizations';
+  const organizations = await getAllOrganizations();
+  const title = 'Our Partner Organizations';
 
-    res.render('organizations', { title, organizations });
+  res.render('organizations', { title, organizations });
 };
 
-// 2. The details page (The one you already had)
 const showOrganizationDetailsPage = async (req, res) => {
     const organizationId = req.params.id;
     const organizationDetails = await getOrganizationDetails(organizationId);
     const projects = await getProjectsByOrganizationId(organizationId);
     const title = 'Organization Details';
 
-    res.render('organization', { title, organizationDetails, projects });
+    res.render('organization', {title, organizationDetails, projects});
 };
 
 const showNewOrganizationForm = async (req, res) => {
@@ -76,8 +76,8 @@ const processNewOrganizationForm = async (req, res) => {
 const showEditOrganizationForm = async (req, res) => {
     const organizationId = req.params.id;
     const organizationDetails = await getOrganizationDetails(organizationId);
-    
     const title = 'Edit Organization';
+
     res.render('edit-organization', { title, organizationDetails });
 };
 
@@ -103,5 +103,5 @@ const processEditOrganizationForm = async (req, res) => {
     res.redirect(`/organization/${organizationId}`);
 };
 
-// 3. Now both functions are defined, so this export will finally work!
+// Export any controller functions
 export { showOrganizationsPage, showOrganizationDetailsPage, showNewOrganizationForm, processNewOrganizationForm, organizationValidation, showEditOrganizationForm, processEditOrganizationForm };

@@ -13,18 +13,46 @@ router.get('/organizations', showOrganizationsPage);
 router.get('/projects', showProjectsPage);
 router.get('/categories', showCategoriesPage);
 // Route for new organization page
+// Route for category details page
+router.get('/category/:id', showCategoryDetailsPage);
+
+// Route for new organization page
 router.get('/new-organization', showNewOrganizationForm);
 
-// --- New/Updated Detail Routes ---
+// Route to handle new organization form submission
+router.post('/new-organization', organizationValidation, processNewOrganizationForm);
+
+// Route for edit organization page
+router.get('/edit-organization/:id', showEditOrganizationForm);
+
+// Route to handle edit organization form submission
+router.post('/edit-organization/:id', organizationValidation, processEditOrganizationForm);
 
 // Route for organization details page
 router.get('/organization/:id', showOrganizationDetailsPage);
 
-// Route for specific project details page
-router.get('/project/:id', showProjectDetailsPage); 
+// Route for new project page
+router.get('/new-project', showNewProjectForm);
 
-router.get('/category/:id', showCategoryDetailsPage);
-// Error-handling routes
+// Route to handle new project form submission
+router.post('/new-project', projectValidation, processNewProjectForm);
+
+// Route for edit project page
+router.get('/edit-project/:id', showEditProjectForm);
+
+// Route to handle edit project form submission
+router.post('/edit-project/:id', projectValidation, processEditProjectForm);
+
+// Route for assigning categories to a project
+router.get('/project/:projectId/assign-categories', showAssignCategoriesForm);
+
+// Route to handle assign categories form submission
+router.post('/project/:projectId/assign-categories', processAssignCategoriesForm);
+
+// Route for project details page
+router.get('/project/:id', showProjectDetailsPage);
+
+// error-handling routes
 router.get('/test-error', testErrorPage);
 
 export default router;

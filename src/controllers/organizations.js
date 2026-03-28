@@ -104,4 +104,4 @@ const processEditOrganizationForm = async (req, res) => {
 };
 
 // 3. Now both functions are defined, so this export will finally work!
-export { showOrganizationsPage, showOrganizationDetailsPage, showNewOrganizationForm };
+export { showOrganizationsPage, showOrganizationDetailsPage, showNewOrganizationForm, processNewOrganizationForm, organizationValidation, showEditOrganizationForm, processEditOrganizationForm };

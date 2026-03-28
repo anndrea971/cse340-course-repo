@@ -13,7 +13,7 @@ import { Pool } from 'pg';
  */
 const pool = new Pool({
     connectionString: process.env.DB_URL,
-    ssl: { rejectUnauthorized: false }
+    ssl: true
 });
 
 /**
@@ -37,6 +37,13 @@ const pool = new Pool({
 let db = null;
 
 if (process.env.NODE_ENV === 'development' && process.env.ENABLE_SQL_LOGGING === 'true') {
+    /**
+     * In development mode, we wrap the pool to provide query logging.
+     * This helps with debugging by showing all executed queries in the console.
+     * 
+     * The wrapper also adds timing information to help identify slow queries
+     * and tracks the number of rows affected by each query.
+     */
     db = {
         async query(text, params) {
             try {
@@ -57,16 +64,13 @@ if (process.env.NODE_ENV === 'development' && process.env.ENABLE_SQL_LOGGING ===
                 throw error;
             }
         },
+
         async close() {
             await pool.end();
         }
     };
 } else {
-    db = pool; // this should already be working
-}
-
-if (!db) {
-    console.error('WARNING: db is null! Falling back to pool directly.');
+    // In production, export the pool directly without logging overhead
     db = pool;
 }
 

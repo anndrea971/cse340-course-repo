@@ -12,6 +12,8 @@ router.get('/', showHomePage);
 router.get('/organizations', showOrganizationsPage);
 router.get('/projects', showProjectsPage);
 router.get('/categories', showCategoriesPage);
+// Route for new organization page
+router.get('/new-organization', showNewOrganizationForm);
 
 // --- New/Updated Detail Routes ---
 

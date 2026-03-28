@@ -13,6 +13,10 @@ const __dirname = path.dirname(__filename);
 const app = express();
 
 app.use(express.static(path.join(__dirname, 'public')));
+// Allow Express to receive and process common POST data
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
 app.set('view engine', 'ejs');
 app.set('views', path.join(process.cwd(), 'src', 'views'));
 app.use((req, res, next) => {

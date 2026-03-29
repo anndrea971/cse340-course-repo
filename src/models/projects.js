@@ -69,16 +69,18 @@ const getUpcomingProjects = async (number_of_projects) => {
 const getProjectDetails = async (id) => {
   const query = `
     SELECT p.project_id,
-           p.title,
+           p.title, -- ADD THIS LINE
+           o.name AS organization_name,
            p.description,
-           p.start_date,
            p.location,
-           p.organization_id,
-           o.name AS organization_name
+           p.start_date,
+           STRING_AGG(c.name, ' | ') AS category_names
     FROM project p
-         JOIN organization o ON p.organization_id = o.organization_id
-    WHERE p.project_id = $1;
-  `;
+             JOIN organization o ON p.organization_id = o.organization_id
+             JOIN project_category pc ON p.project_id = pc.project_id
+             JOIN category c ON pc.category_id = c.category_id
+    GROUP BY p.project_id, p.title, o.name, p.description, p.location, p.start_date; -- ADD p.title HERE TOO
+`;
 
   const result = await db.query(query, [id]);
   return result.rows[0];

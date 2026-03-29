@@ -25,7 +25,7 @@ CREATE SEQUENCE organization_id_seq
 
 CREATE TABLE public.organization
 (
-    organization_id integer                                             NOT NULL DEFAULT nextval('organization_id_seq'::regclass),
+    organization_id integer                                         NOT NULL DEFAULT nextval('organization_id_seq'::regclass),
     name            character varying(150) COLLATE pg_catalog."default" NOT NULL,
     description     text COLLATE pg_catalog."default"                   NOT NULL,
     contact_email   character varying(255) COLLATE pg_catalog."default" NOT NULL,
@@ -104,74 +104,81 @@ ALTER TABLE public.project_category
         ON DELETE NO ACTION;
 
 -----------------------------------------------
--- Data
+-- Data: Organizations
 -----------------------------------------------
 
-INSERT INTO public.organization (name, description, contact_email, logo_filename)
-VALUES ('BrightFuture Builders', 'A nonprofit focused on improving community infrastructure through sustainable construction projects.',
-        'info@brightfuturebuilders.org', 'brightfuture-logo.png');
+INSERT INTO public.organization (name, description, contact_email, logo_filename) VALUES 
+('BrightFuture Builders', 'A nonprofit focused on improving community infrastructure through sustainable construction projects.', 'info@brightfuturebuilders.org', 'brightfuture-logo.png'),
+('GreenHarvest Growers', 'An urban farming collective promoting food sustainability and education in local neighborhoods.', 'contact@greenharvest.org', 'greenharvest-logo.png'),
+('UnityServe Volunteers', 'A volunteer coordination group supporting local charities and service initiatives.', 'hello@unityserve.org', 'unityserve-logo.png');
 
-INSERT INTO public.organization (name, description, contact_email, logo_filename)
-VALUES ('GreenHarvest Growers', 'An urban farming collective promoting food sustainability and education in local neighborhoods.', 'contact@greenharvest.org',
-        'greenharvest-logo.png');
+-----------------------------------------------
+-- Data: Categories
+-----------------------------------------------
 
-INSERT INTO public.organization (name, description, contact_email, logo_filename)
-VALUES ('UnityServe Volunteers', 'A volunteer coordination group supporting local charities and service initiatives.', 'hello@unityserve.org',
-        'unityserve-logo.png');
+INSERT INTO public.category (category_id, name, description) VALUES 
+(DEFAULT, 'Environmental', 'Park cleanups, tree planting, trail maintenance, recycling drives'),
+(DEFAULT, 'Hunger & Food Security', 'Food bank sorting, meal preparation, community garden work'),
+(DEFAULT, 'Housing & Shelter', 'Habitat for Humanity builds, homeless shelter volunteering, home repair for elderly residents'),
+(DEFAULT, 'Education & Literacy', 'Tutoring, school supply drives, library volunteering, reading programs'),
+(DEFAULT, 'Health & Wellness', 'Blood drives, hospital volunteering, mental health awareness campaigns, free clinic support'),
+(DEFAULT, 'Animal Welfare', 'Shelter volunteering, fostering, pet supply drives, wildlife habitat restoration'),
+(DEFAULT, 'Elder Care', 'Nursing home visits, errand assistance, technology tutoring for seniors, companionship programs'),
+(DEFAULT, 'Youth & Mentoring', 'After-school programs, Big Brothers/Big Sisters, coaching, career mentoring'),
+(DEFAULT, 'Disaster Relief', 'Emergency supply collection, rebuilding efforts, first aid training, preparedness kits'),
+(DEFAULT, 'Community Development', 'Neighborhood beautification, civic engagement drives, clothing drives, free legal or tax prep clinics');
 
-INSERT INTO public.category (category_id, name, description)
-VALUES (DEFAULT, 'Environmental', 'Park cleanups, tree planting, trail maintenance, recycling drives');
+-----------------------------------------------
+-- Data: Projects (De-duplicated)
+-----------------------------------------------
 
-INSERT INTO public.category (category_id, name, description)
-VALUES (DEFAULT, 'Hunger & Food Security', 'Food bank sorting, meal preparation, community garden work');
+INSERT INTO public.project (project_id, organization_id, title, description, location, start_date) VALUES 
+(DEFAULT, 1, 'Park Cleanup Day', 'Join us for a day of cleaning and beautifying our local park.', 'Central Park', '2024-07-15'),
+(DEFAULT, 2, 'Food Bank Sorting', 'Help us sort and organize donations at the local food bank.', 'City Food Bank', '2024-07-20'),
+(DEFAULT, 3, 'Habitat for Humanity Build', 'Working with local volunteers to create a sustainable community space.', 'Habitat for Humanity', '2024-07-25'),
+(DEFAULT, 1, 'Community Garden Build', 'Help us build raised beds for the local community garden.', 'City Park', '2026-04-01'),
+(DEFAULT, 1, 'Shelter Painting', 'Refreshing the interior walls of the downtown shelter.', 'Main Shelter', '2026-04-10'),
+(DEFAULT, 1, 'Park Bench Restoration', 'Sanding and staining benches to revitalize the park.', 'Riverside Park', '2026-04-15'),
+(DEFAULT, 1, 'Tutoring Setup', 'Organizing supplies and desks for the after-school program.', 'Library', '2026-04-20'),
+(DEFAULT, 1, 'Playground Safety Check', 'Replacing woodchips and checking equipment safety.', 'Elm Street Park', '2026-04-22'),
+(DEFAULT, 1, 'First Aid Training', 'Basic first aid certification for community volunteers.', 'Community Center', '2026-05-01'),
+(DEFAULT, 1, 'Wellness Walk', 'Group walk to promote physical and mental health.', 'City Trail', '2026-05-05'),
+(DEFAULT, 2, 'Reading Buddies', 'Pair with young readers to improve literacy skills.', 'Public Library', '2026-05-08'),
+(DEFAULT, 2, 'Spring Seed Sowing', 'Planting heirloom tomato and pepper seeds.', 'Community Garden', '2026-05-10'),
+(DEFAULT, 2, 'Orchard Pruning Workshop', 'Learning to prune fruit trees for better yield.', 'Urban Orchard', '2026-05-12'),
+(DEFAULT, 2, 'Irrigation Pipe Repair', 'Fixing leaks in the community garden water system.', 'Community Garden', '2026-05-15'),
+(DEFAULT, 2, 'Homework Help Club', 'After school tutoring for middle school students.', 'Library', '2026-05-18'),
+(DEFAULT, 2, 'Mental Health Awareness', 'Community discussion event and resource sharing.', 'Community Center', '2026-05-20'),
+(DEFAULT, 3, 'Senior Tech Support Day', 'Helping local seniors set up video calls and devices.', 'Senior Center', '2026-05-22'),
+(DEFAULT, 3, 'Neighborhood Cleanup', 'Picking up litter in the downtown area.', 'Downtown', '2026-05-25'),
+(DEFAULT, 3, 'Trail Maintenance', 'Clearing and maintaining hiking trails.', 'Nature Reserve', '2026-05-28'),
+(DEFAULT, 3, 'Yoga in the Park', 'Free outdoor yoga session for all skill levels.', 'City Park', '2026-06-01'),
+(DEFAULT, 3, 'Mural Painting', 'Creating a community mural to beautify the center.', 'Community Center', '2026-06-05');
 
-INSERT INTO public.category (category_id, name, description)
-VALUES (DEFAULT, 'Housing & Shelter', 'Habitat for Humanity builds, homeless shelter volunteering, home repair for elderly residents');
+-----------------------------------------------
+-- Data: Project_Category Mapping
+-----------------------------------------------
 
-INSERT INTO public.category (category_id, name, description)
-VALUES (DEFAULT, 'Education & Literacy', 'Tutoring, school supply drives, library volunteering, reading programs');
-
-INSERT INTO public.category (category_id, name, description)
-VALUES (DEFAULT, 'Health & Wellness', 'Blood drives, hospital volunteering, mental health awareness campaigns, free clinic support');
-
-INSERT INTO public.category (category_id, name, description)
-VALUES (DEFAULT, 'Animal Welfare', 'Shelter volunteering, fostering, pet supply drives, wildlife habitat restoration');
-
-INSERT INTO public.category (category_id, name, description)
-VALUES (DEFAULT, 'Elder Care', 'Nursing home visits, errand assistance, technology tutoring for seniors, companionship programs');
-
-INSERT INTO public.category (category_id, name, description)
-VALUES (DEFAULT, 'Youth & Mentoring', 'After-school programs, Big Brothers/Big Sisters, coaching, career mentoring');
-
-INSERT INTO public.category (category_id, name, description)
-VALUES (DEFAULT, 'Disaster Relief', 'Emergency supply collection, rebuilding efforts, first aid training, preparedness kits');
-
-INSERT INTO public.category (category_id, name, description)
-VALUES (DEFAULT, 'Community Development', 'Neighborhood beautification, civic engagement drives, clothing drives, free legal or tax prep clinics');
-
-INSERT INTO public.project (project_id, organization_id, title, description, location, start_date)
-VALUES (DEFAULT, 1, 'Park Cleanup Day',
-        'Join us for a day of cleaning and beautifying our local park. We will be picking up trash, planting flowers, and making our community space more enjoyable for everyone.',
-        'Central Park', '2024-07-15');
-
-INSERT INTO public.project (project_id, organization_id, title, description, location, start_date)
-VALUES (DEFAULT, 2,'Food Bank Sorting',
-        'Help us sort and organize donations at the local food bank. Your efforts will directly support families in need by ensuring they receive the food they require.',
-        'City Food Bank', '2024-07-20');
-
-INSERT INTO public.project (project_id, organization_id, title, description, location, start_date)
-VALUES (DEFAULT, 3,'Habitat for Humanity Build',
-        'Join us for a weekend of community building and rehabilitation. We will be working with local volunteers to create a sustainable community space for our neighbors.',
-        'Habitat for Humanity', '2024-07-25');
-
-INSERT INTO public.project_category (project_id, category_id)
-VALUES (1, 1);
-
-INSERT INTO public.project_category (project_id, category_id)
-VALUES (1, 3);
-
-INSERT INTO public.project_category (project_id, category_id)
-VALUES (2, 2);
-
-INSERT INTO public.project_category (project_id, category_id)
-VALUES (3, 3);
+INSERT INTO public.project_category (project_id, category_id) VALUES 
+(1, 1),   -- Park Cleanup -> Environmental
+(1, 10),  -- Park Cleanup -> Community Development
+(2, 2),   -- Food Bank Sorting -> Hunger & Food Security
+(3, 3),   -- Habitat Build -> Housing & Shelter
+(4, 10),  -- Community Garden Build -> Community Development
+(5, 3),   -- Shelter Painting -> Housing & Shelter
+(6, 1),   -- Park Bench Restoration -> Environmental
+(7, 4),   -- Tutoring Setup -> Education & Literacy
+(8, 10),  -- Playground Safety Check -> Community Development
+(9, 5),   -- First Aid Training -> Health & Wellness
+(10, 5),  -- Wellness Walk -> Health & Wellness
+(11, 4),  -- Reading Buddies -> Education & Literacy
+(12, 1),  -- Spring Seed Sowing -> Environmental
+(13, 1),  -- Orchard Pruning Workshop -> Environmental
+(14, 1),  -- Irrigation Pipe Repair -> Environmental
+(15, 4),  -- Homework Help Club -> Education & Literacy
+(16, 5),  -- Mental Health Awareness -> Health & Wellness
+(17, 7),  -- Senior Tech Support Day -> Elder Care
+(18, 10), -- Neighborhood Cleanup -> Community Development
+(19, 1),  -- Trail Maintenance -> Environmental
+(20, 5),  -- Yoga in the Park -> Health & Wellness
+(21, 10); -- Mural Painting -> Community Development

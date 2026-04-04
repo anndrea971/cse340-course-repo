@@ -22,7 +22,7 @@ const showCategoryDetailsPage = async (req, res, next) => {
 
   const projects = await getProjectsByCategoryId(categoryId);
 
-  res.render('category', { title: category.name, category, projects });
+  res.render('category', { title: category.name, categoryName: category.name, category, projects });
 };
 
 const showAssignCategoriesForm = async (req, res) => {

@@ -76,4 +76,18 @@ const updateCategoryAssignments = async (projectId, categoryIds) => {
     }
 };
 
-export { getAllCategories, getCategoryById, getCategoriesByProjectId, getProjectsByCategoryId, updateCategoryAssignments }
+const createCategory = async (name, description) => {
+  const query = `INSERT INTO category (name, description) VALUES ($1, $2) RETURNING category_id;`;
+  const result = await db.query(query, [name, description]);
+  if (result.rows.length === 0) {
+    throw new Error('Failed to create category');
+  }
+  return result.rows[0].category_id;
+};
+
+const updateCategory = async (id, name, description) => {
+  const query = `UPDATE category SET name = $1, description = $2 WHERE category_id = $3;`;
+  await db.query(query, [name, description, id]);
+};
+
+export { getAllCategories, getCategoryById, getCategoriesByProjectId, getProjectsByCategoryId, updateCategoryAssignments, createCategory, updateCategory };

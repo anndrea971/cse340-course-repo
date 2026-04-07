@@ -3,7 +3,7 @@ import express from 'express';
 import { showHomePage } from './index.js';
 import { showOrganizationsPage, showOrganizationDetailsPage, showNewOrganizationForm, processNewOrganizationForm, organizationValidation, showEditOrganizationForm, processEditOrganizationForm } from './organizations.js';
 import { showProjectsPage, showProjectDetailsPage, showNewProjectForm, processNewProjectForm, projectValidation, showEditProjectForm, processEditProjectForm } from './projects.js';
-import { showCategoriesPage, showCategoryDetailsPage, showAssignCategoriesForm, processAssignCategoriesForm } from './categories.js';
+import { showCategoriesPage, showCategoryDetailsPage, showAssignCategoriesForm, processAssignCategoriesForm, showNewCategoryForm, processNewCategoryForm, categoryValidation, showEditCategoryForm, processEditCategoryForm } from './categories.js';
 import { testErrorPage } from './errors.js';
 
 const router = express.Router();
@@ -51,6 +51,15 @@ router.post('/project/:projectId/assign-categories', processAssignCategoriesForm
 
 // Route for project details page
 router.get('/project/:id', showProjectDetailsPage);
+
+router.get('/categories', showCategoriesPage);
+router.get('/category/:id', showCategoryDetailsPage); 
+
+router.get('/new-category', showNewCategoryForm);
+router.post('/new-category', categoryValidation, processNewCategoryForm);
+
+router.get('/edit-category/:id', showEditCategoryForm);
+router.post('/edit-category/:id', categoryValidation, processEditCategoryForm);
 
 // error-handling routes
 router.get('/test-error', testErrorPage);

@@ -201,3 +201,7 @@ CREATE TABLE users (
 INSERT INTO roles (role_name, role_description) VALUES
     ('user', 'Standard user with basic access'),
     ('admin', 'Administrator with full system access');
+
+UPDATE users 
+SET role_id = (SELECT role_id FROM roles WHERE role_name = 'admin') 
+WHERE email = 'admin@test.com';

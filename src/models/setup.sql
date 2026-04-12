@@ -205,3 +205,14 @@ INSERT INTO roles (role_name, role_description) VALUES
 UPDATE users 
 SET role_id = (SELECT role_id FROM roles WHERE role_name = 'admin') 
 WHERE email = 'admin@test.com';
+
+-----------------------------------------------
+-- Volunteer (join table for users and projects)
+-----------------------------------------------
+CREATE TABLE public.volunteer
+(
+    user_id integer NOT NULL REFERENCES public.users (user_id) ON DELETE CASCADE,
+    project_id integer NOT NULL REFERENCES public.project (project_id) ON DELETE CASCADE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id, project_id)
+);

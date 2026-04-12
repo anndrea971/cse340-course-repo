@@ -4,6 +4,7 @@ import { showHomePage } from './index.js';
 import { showOrganizationsPage, showOrganizationDetailsPage, showNewOrganizationForm, processNewOrganizationForm, organizationValidation, showEditOrganizationForm, processEditOrganizationForm } from './organizations.js';
 import { showProjectsPage, showProjectDetailsPage, showNewProjectForm, processNewProjectForm, projectValidation, showEditProjectForm, processEditProjectForm } from './projects.js';
 import { showCategoriesPage, showCategoryDetailsPage, showAssignCategoriesForm, processAssignCategoriesForm, showNewCategoryForm, processNewCategoryForm, categoryValidation, showEditCategoryForm, processEditCategoryForm } from './categories.js';
+import { processAddVolunteer, processRemoveVolunteer } from './volunteers.js';
 import { testErrorPage } from './errors.js';
 
 // Import the new user controller functions and middleware
@@ -29,6 +30,8 @@ router.get('/logout', processLogout);
 
 // --- PROTECTED ROUTES (Requires User to be Logged In) ---
 router.get('/dashboard', requireLogin, showDashboard);
+router.post('/project/:id/volunteer', requireLogin, processAddVolunteer);
+router.post('/project/:id/remove-volunteer', requireLogin, processRemoveVolunteer);
 
 // --- ADMIN-ONLY ROUTES (Requires Admin Role) ---
 // Users List

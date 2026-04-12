@@ -14,6 +14,21 @@
     <p><strong>Location:</strong> <%= project.location %></p>
    <p><strong>Partner Organization:</strong> <a href="/organization/<%= project.organization_id %>"><%= project.organization_name %></a></p>
 
+<% if (locals.isLoggedIn) { %>
+      <div class="volunteer-actions" style="margin: 1.5rem 0; padding: 1rem; background-color: var(--secondary-bg); border-radius: 8px;">
+          <% if (isVolunteering) { %>
+              <p style="color: #155724; font-weight: bold;">✓ You are volunteering for this project.</p>
+              <form action="/project/<%= project.project_id %>/remove-volunteer" method="POST">
+                  <button type="submit" style="background-color: #dc3545;">Remove me as a volunteer</button>
+              </form>
+          <% } else { %>
+              <form action="/project/<%= project.project_id %>/volunteer" method="POST">
+                  <button type="submit">Volunteer for this project</button>
+              </form>
+          <% } %>
+      </div>
+  <% } %>
+
    <% if (locals.user && locals.user.role_name === 'admin') { %>
 <p><a href="/edit-project/<%= project.project_id %>">Edit Project</a></p>
   <p><a href="/project/<%= project.project_id %>/assign-categories">Manage Categories</a></p>

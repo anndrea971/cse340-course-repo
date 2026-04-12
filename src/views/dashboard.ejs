@@ -5,6 +5,25 @@
   <p><strong>Email:</strong> <%= user.email %></p>
   <p><strong>Role:</strong> <%= user.role_name %></p>
   
+<hr>
+  <h2>My Volunteered Projects</h2>
+  <% if (volunteeredProjects && volunteeredProjects.length > 0) { %>
+      <ul style="text-align: left; max-width: 600px; margin: 0 auto;">
+          <% volunteeredProjects.forEach(project => { %>
+              <li style="margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color);">
+                  <strong><a href="/project/<%= project.project_id %>"><%= project.title %></a></strong><br>
+                  Date: <%= new Date(project.start_date).toLocaleDateString() %><br>
+                  Organization: <%= project.organization_name %><br>
+                  <form action="/project/<%= project.project_id %>/remove-volunteer" method="POST" style="margin-top: 0.5rem;">
+                      <button type="submit" style="background-color: #dc3545; padding: 5px 10px; font-size: 0.9em;">Remove Volunteer Status</button>
+                  </form>
+              </li>
+          <% }) %>
+      </ul>
+  <% } else { %>
+      <p>You have not volunteered for any projects yet.</p>
+  <% } %>
+
   <% if (user.role_name === 'admin') { %>
       <hr>
       <h2>Admin Tools</h2>

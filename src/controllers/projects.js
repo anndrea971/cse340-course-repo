@@ -1,3 +1,4 @@
+import { checkVolunteerStatus } from '../models/volunteers.js';
 import { getUpcomingProjects, getProjectDetails, createProject, updateProject } from '../models/projects.js';
 import { getAllOrganizations } from '../models/organizations.js';
 import { getCategoriesByProjectId } from '../models/categories.js';
@@ -57,7 +58,13 @@ const showProjectDetailsPage = async (req, res, next) => {
 
   const categories = await getCategoriesByProjectId(projectId);
 
-  res.render('project', { title: project.title, project, categories });
+  let isVolunteering = false;
+    if (req.session && req.session.user) {
+        isVolunteering = await checkVolunteerStatus(req.session.user.user_id, projectId);
+    }
+const title = project.title;
+
+  res.render('project', { title: project.title, project, categories, isVolunteering });
 };
 
 const showNewProjectForm = async (req, res) => {

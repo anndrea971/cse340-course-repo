@@ -1,3 +1,4 @@
+import { getVolunteeredProjects } from '../models/volunteers.js';
 import bcrypt from 'bcrypt';
 import { createUser, authenticateUser, getAllUsers } from '../models/users.js';
 
@@ -60,8 +61,9 @@ const processLogout = (req, res) => {
     res.redirect('/login');
 };
 
-const showDashboard = (req, res) => {
-    res.render('dashboard', { title: 'Dashboard', user: req.session.user });
+const showDashboard = async (req, res) => {
+   const volunteeredProjects = await getVolunteeredProjects(req.session.user.user_id);
+    res.render('dashboard', { title: 'Dashboard', user: req.session.user, volunteeredProjects });
 };
 
 const showUsersPage = async (req, res) => {
